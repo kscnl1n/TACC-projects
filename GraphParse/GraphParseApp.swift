@@ -17,13 +17,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 }
 
 @main
-struct LandmarksApp: App {
+struct GraphParseApp: App {
     
     // register app delegate for firebase setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
     init() {
         FirebaseApp.configure()
+        print("Firebase configured")
     }
     var body: some Scene {
         WindowGroup {

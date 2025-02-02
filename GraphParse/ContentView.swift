@@ -15,7 +15,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView() 
 }
 
 struct CameraUploadView: View {
@@ -60,6 +60,13 @@ struct CameraUploadView: View {
             }
         }
         .sheet(isPresented: $isShowingCamera) {
+            // Function to create an instance of ImagePicker,
+            // a UI View controller representable object that
+            // allows the user to pick an image (from the camera or
+            // photo library).
+            // It passes the image binding (image: $image)
+            // meaning ImagePicker can modify they image state variable
+            // in CameraUploadView.
             ImagePicker(image: $image, onUploadComplete: { uploadedURL in
                 if let uploadedURL = uploadedURL {
                     self.uploadedImageURL = uploadedURL
@@ -100,11 +107,11 @@ struct ImagePicker: UIViewControllerRepresentable {
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             if let selectedImage = info[.originalImage] as? UIImage {
                 parent.image = selectedImage
-                uploadToFirebase(image: selectedImage) { uploadedURL in
-                    self.onUploadComplete(uploadedURL)  // Call the callback function with the uploaded image URL
+               uploadToFirebase(image: selectedImage) { uploadedURL in
+                self.onUploadComplete(uploadedURL)  // Call the callback function with the uploaded image URL
                 }
             }
-            picker.dismiss(animated: true)
+        picker;.dismiss(animated: true)
         }
     }
 }
