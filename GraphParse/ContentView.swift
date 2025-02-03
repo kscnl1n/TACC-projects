@@ -8,6 +8,7 @@ import SwiftUI
 import UIKit
 import FirebaseStorage
 
+// This is the entry point of the app
 struct ContentView: View {
     var body: some View {
         CameraUploadView()
@@ -18,24 +19,33 @@ struct ContentView: View {
     ContentView() 
 }
 
+// Main UI for capturing and uploading images:
 struct CameraUploadView: View {
+    // Variable to hold the user's image from camera
     @State private var image: UIImage?
+    // Bool to hood camera's visibility (AKA is it off or on)
     @State private var isShowingCamera = false
+    // String for our new firebase image URL
     @State private var uploadedImageURL: String?  // Store uploaded image URL
     
+    // UI for frontend layout
     var body: some View {
         VStack {
             Text("GraphParse")
                 .font(.largeTitle)
             Text("We'll turn your sketch into a graph.")
             
+            // Image display logic
             if let image = image {
+                
+                // This function shows the selected image
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 300, height: 200)
                     .cornerRadius(10)
                 
+                // Showing upload status
                 if let uploadedImageURL = uploadedImageURL {
                     Text("Image Uploaded!")
                         .foregroundColor(.green)
@@ -45,6 +55,8 @@ struct CameraUploadView: View {
                 } else {
                     Text("Uploading...")  // Show status while uploading
                 }
+                
+            // If no image is selected, show a blank grey screen:
             } else {
                 Rectangle()
                     .fill(Color.gray.opacity(0.2))
@@ -59,6 +71,8 @@ struct CameraUploadView: View {
                     }
             }
         }
+        
+        // Presents imagePicker when isShowingCamera = true (when the user selects to show a camera)
         .sheet(isPresented: $isShowingCamera) {
             // Function to create an instance of ImagePicker,
             // a UI View controller representable object that
@@ -78,6 +92,7 @@ struct CameraUploadView: View {
 }
 
 // Our image picker function allows the user to capture an image with their camera. At the end we call the uploadToFirebase function to upload that image to our firebase server.
+// It wraps it for SwiftUI compatibility.
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var image: UIImage?
     var onUploadComplete: (String?) -> Void  // New callback function
